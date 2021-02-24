@@ -122,7 +122,7 @@ gyro.mode = "GYRO-ANG"
 start_angle = gyro.value()
 angle = 0
 
-    
+#fjgjzgklfklhgfhjfkhjzbhjk fzhzkchnckgnfkflhgfkbbbdbvfhvf    
     
 forward (50,10,486,486*2,0.1)
 
