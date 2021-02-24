@@ -15,19 +15,8 @@ C3 = 'in3'
 D4 = 'in4'
 # тут должен быть дальномер
 import math
-def motor_start (port1,port2): #инициализация моторов
-    m_left = LargeMotor(port1)
-    m_right = LargeMotor(port2)
-    return m_left,m_right
-def sensor_start (port,name): #гироскоп (вскоре другие датчики)
-    if name == gyro:
-        gyro = GyroSensor(port)
-        gyro.mode = "GYRO-ANG"
-        return gyro
-    elif name == ultrasonic:
-        us = UltrasonicSensor(port) 
-        us.mode='US-DIST-CM'
-        return us
+
+
 def enc_to_meters(radius,encoder): #енкодерские единицы в метры
     # пи * r = 180 градусов
 
@@ -49,19 +38,27 @@ def find_angle (start_angle):#нахождение относительного 
 def right (speed,angle,start_angle_right,time_sleep):
     sleep(time_sleep)
     angle_0 = start_angle_right
+    print(angle_0)
     m_left.run_forever(speed_sp=-speed) #кручение моторами
     m_right.run_forever(speed_sp=speed) 
     if start_angle_right<angle:
         while angle_0>0 and angle_0<angle: 
             angle_0 = find_angle(start_angle)
             sleep(0.5)
+            print(angle_0)
+
         while angle_0>start_angle_right-angle+360:
             angle_0 = find_angle(start_angle)
             sleep(0.5)
+            print(angle_0)
     else:
         while angle_0>start_angle_right-angle:
             angle_0 = find_angle(start_angle)
             sleep(0.5)
+            print(angle_0)
+    print(angle_0-start_angle_right)
+    m_left.stop(stop_action="hold")
+    m_right.stop(stop_action="hold")
 def forward (speed,time,fin_x,fin_y,time_sleep):# основная функция (скорость, время движения, предполагаемые координаты, задержка перед запуском)
     global x, y # координаты
 
@@ -118,12 +115,14 @@ m_right = LargeMotor(C)
     
 gyro = GyroSensor(C3)
 gyro.mode = "GYRO-ANG"
-
+print (gyro.value())
 start_angle = gyro.value()
 angle = 0
 
-#fjgjzgklfklhgfhjfkhjzbhjk fzhzkchnckgnfkflhgfkbbbdbvfhvf    
+  
     
 forward (50,10,486,486*2,0.1)
+start_angle_right = find_angle(start_angle)
+right (50,90,start_angle_right,0.1)
 
     
